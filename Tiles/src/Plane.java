@@ -4,24 +4,14 @@ public class Plane {
     public PlaneNode[][] _plane;
 
     public Plane() {
-        _height = 3;
-        _width = 3;
+        _height = 0;
+        _width = 0;
         init();
     }
 
     public Plane(int height, int width) {
-        if (height <= 1) {
-            _height = 3;
-        } else {
-            _height = height + 2;
-        }
-
-        if (width <= 1) {
-            _width = 3;
-        } else {
-            _width = width + 2;
-        }
-
+        _width = width;
+        _height = height;
         init();
     }
 
@@ -29,9 +19,9 @@ public class Plane {
         _plane = new PlaneNode[_width][_height];
         
         // create all TileNodes in the plane
-        for (int i = 0; i < _width; i++) {
-            for (int j = 0; j < _height; j++) {
-                _plane[i][j] = new PlaneNode(i, j);
+        for (int x = 0; x < _width; x++) {
+            for (int y = 0; y < _height; y++) {
+                _plane[x][y] = new PlaneNode(x, y);
             }
         }
 
@@ -163,10 +153,10 @@ public class Plane {
         return prev;
     }
 
-    public void setAll(Tile universal) {
+    public void setAll(Tile tile) {
         for (int x = 0; x < _width - 2; x++) {
             for (int y = 0; y < _height - 2; y++) {
-                set(x, y, universal);
+                set(x, y, tile);
             }
         }
     }
@@ -183,7 +173,6 @@ public class Plane {
                 bigPlane.set(x, y, _plane[x][y]._tile);
             }
         }
-
 
         return false;
     }

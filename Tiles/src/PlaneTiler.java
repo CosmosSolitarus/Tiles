@@ -9,8 +9,18 @@ public class PlaneTiler {
     public PlaneTiler(int width, int height) {
         _tiles = new ArrayList<>();
         _universal = new Tile();
-        _width = width;
-        _height = height;
+
+        if (height <= 1) {
+            _height = 3;
+        } else {
+            _height = height + 2;
+        }
+
+        if (width <= 1) {
+            _width = 3;
+        } else {
+            _width = width + 2;
+        }
     }
 
     public boolean add(Tile tile) {
