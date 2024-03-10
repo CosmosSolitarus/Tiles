@@ -1,201 +1,345 @@
 public class Plane {
-    public int _height;
     public int _width;
-    public PlaneNode[][] _plane;
+    public int _height;
+    public Tile[][] _plane;
 
     public Plane() {
-        _height = 0;
         _width = 0;
+        _height = 0;
         init();
     }
 
-    public Plane(int height, int width) {
-        _width = width;
-        _height = height;
+    public Plane(int width, int height) {
+        if (width < 0) {
+            _width = 0;
+        } else {
+            _width = width;
+        }
+
+        if (height < 0) {
+            _height = 0;
+        } else {
+            _height = height;
+        }
+
         init();
+    }
+
+    public Plane(Plane that) {
+        this(that._width, that._height);
+
+        for (int x = 0; x < _width; x++) {
+            for (int y = 0; y < _height; y++) {
+                this._plane[y][x] = new Tile(that._plane[y][x]);
+            }
+        }
     }
 
     private void init() {
-        _plane = new PlaneNode[_width][_height];
-        
-        // create all TileNodes in the plane
+        _plane = new Tile[_height][_width];
+
+        // create blank tiles in the plane
         for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
-                _plane[x][y] = new PlaneNode(x, y);
+                _plane[y][x] = new Tile();
             }
         }
-
-        // ---- connect TileNodes together ----
-        // center TileNodes
-        for (int x = 1; x < _width - 1; x++) {
-            for (int y = 1; y < _height - 1; y++) {
-                _plane[x][y]._TL = _plane[x-1][y-1];
-                _plane[x][y]._TM = _plane[x][y-1];
-                _plane[x][y]._TR = _plane[x+1][y-1];
-                _plane[x][y]._ML = _plane[x-1][y];
-                _plane[x][y]._MR = _plane[x+1][y];
-                _plane[x][y]._BL = _plane[x-1][y+1];
-                _plane[x][y]._BM = _plane[x][y+1];
-                _plane[x][y]._BR = _plane[x+1][y+1];
-            }
-        }
-
-        // top center TileNodes
-        for (int x = 1; x < _width - 1; x++) {
-            _plane[x][0]._ML = _plane[x-1][0];
-            _plane[x][0]._MR = _plane[x+1][0];
-            _plane[x][0]._BL = _plane[x-1][1];
-            _plane[x][0]._BM = _plane[x][1];
-            _plane[x][0]._BR = _plane[x+1][1];
-        }
-
-        // bottom center TileNodes
-        for (int x = 1; x < _width - 1; x++) {
-            _plane[x][_height-1]._TL = _plane[x-1][_height-2];
-            _plane[x][_height-1]._TM = _plane[x][_height-2];
-            _plane[x][_height-1]._TR = _plane[x+1][_height-2];
-            _plane[x][_height-1]._ML = _plane[x-1][_height-1];
-            _plane[x][_height-1]._MR = _plane[x+1][_height-1];
-        }
-
-        // left center TileNodes
-        for (int y = 1; y < _height - 1; y++) {
-            _plane[0][y]._TM = _plane[0][y-1];
-            _plane[0][y]._TR = _plane[1][y-1];
-            _plane[0][y]._MR = _plane[1][y];
-            _plane[0][y]._BM = _plane[0][y+1];
-            _plane[0][y]._BR = _plane[1][y+1];
-        }
-
-        // right center TileNodes
-        for (int y = 1; y < _height - 1; y++) {
-            _plane[_width-1][y]._TL = _plane[_width-2][y-1];
-            _plane[_width-1][y]._TM = _plane[_width-1][y-1];
-            _plane[_width-1][y]._ML = _plane[_width-2][y];
-            _plane[_width-1][y]._BL = _plane[_width-2][y+1];
-            _plane[_width-1][y]._BM = _plane[_width-1][y+1];
-        }
-        
-        // top left TileNode
-        _plane[0][0]._MR = _plane[1][0];
-        _plane[0][0]._BM = _plane[0][1];
-        _plane[0][0]._BR = _plane[1][1];
-
-        // top right TileNode
-        _plane[_width-1][0]._ML = _plane[_width-2][0];
-        _plane[_width-1][0]._BL = _plane[_width-2][1];
-        _plane[_width-1][0]._BM = _plane[_width-1][1];        
-        
-        // bottom left TileNode
-        _plane[0][_height-1]._TM = _plane[0][_height-2];
-        _plane[0][_height-1]._TR = _plane[1][_height-2];
-        _plane[0][_height-1]._MR = _plane[1][_height-1];        
-        
-        // bottom right TileNode
-        _plane[_width-1][_height-1]._TL = _plane[_width-2][_height-2];
-        _plane[_width-1][_height-1]._TM = _plane[_width-1][_height-2];
-        _plane[_width-1][_height-1]._ML = _plane[_width-2][_height-1];
-    }
-
-    public PlaneNode get(int x, int y) {
-        checkBounds(x, y);
-        return _plane[x+1][y+1];
     }
 
     private void checkBounds(int x, int y) {
-        if (x < 0 || x >= _width - 2 || y < 0 || y >= _height - 2) {
-            throw new IndexOutOfBoundsException("Invalid coordinates: (" + x + ", " + y + "). 0 <= x <= " + (_width-3) + " and 0 <= y <= " + (_height-3) + ".");
+        if (x < 0 || x >= _width || y < 0 || y >= _height) {
+            throw new IndexOutOfBoundsException("Invalid coordinates: (" + x + ", " + y + "). 0 <= x <= " + (_width-1) + " and 0 <= y <= " + (_height-1) + ".");
         } 
     }
 
-    public PlaneNode set(int x, int y, Tile tile) {
+    private void checkPlanarBounds(int x, int y) {
+        if (x < 1 || x >= _width-1 || y < 1 || y >= _height-1) {
+            throw new IndexOutOfBoundsException("Invalid coordinates (Planar): (" + x + ", " + y + "). 1 <= x <= " + (_width-2) + " and 1 <= y <= " + (_height-2) + ".");
+        } 
+    }
+
+    public Tile set(int x, int y, Tile tile) {
         checkBounds(x, y);
 
-        PlaneNode prev = _plane[x+1][y+1];
+        Tile prev = _plane[y][x];
 
-        _plane[x+1][y+1]._tile = tile;
+        _plane[y][x] = tile;
 
+        return prev;
+    }
+
+    public void setAll(Tile tile) {
+        for (int x = 0; x < _width; x++) {
+            for (int y = 0; y < _height; y++) {
+                set(x, y, tile);
+            }
+        }
+    }
+
+    public Tile planarSet(int x, int y, Tile tile) {
+        checkPlanarBounds(x, y);
+        
+        Tile prev = set(x, y, tile);
+        
         // add tiles to right and left edges of plane
-        // TOP NEEDS TO BE UNIVERSAL
-        if (x == 0) {
-            _plane[_width-1][y+1]._tile = tile; // right
+        if (x == 1) {
+            set(_width-1, y, tile);       // right
         }
         
-        if (x == _width - 3) {
-            _plane[0][y+1]._tile = tile;        // left
+        if (x == _width - 2) {
+            set(0, y, tile);            // left
         }
 
         // add tiles to top and bottom edges and corners of plane
-        if (y == 0) {
-            _plane[x+1][_height-1]._tile = tile;            // bottom edge
+        if (y == 1) {
+            set(x, _height-1, tile);                // bottom edge
 
-            if (x == 0) {
-                _plane[_width-1][_height-1]._tile = tile;   // bottom right corner
+            if (x == 1) {
+                set(_width-1, _height-1, tile);     // bottom right corner
             }
             
-            if (x == _width - 3) {
-                _plane[0][_height-1]._tile = tile;          // bottom left corner
+            if (x == _width - 2) {
+                set(0, _height-1, tile);            // bottom left corner
             }
         }
 
-        if (y == _height - 3) {
-            _plane[x+1][0]._tile = tile;
+        if (y == _height - 2) {
+            set(x, 0, tile);                        // top edge
 
-            if (x == 0) {
-                _plane[_width-1][0]._tile = tile;           // top right corner
+            if (x == 1) {
+                set(_width-1, 0, tile);             // top right corner
             }
             
-            if (x == _width - 3) {
-                _plane[0][0]._tile = tile;                  // top left corner
+            if (x == _width - 2) {
+                set(0, 0, tile);                // top left corner
             }
         }
 
         return prev;
     }
 
-    public void setAll(Tile tile) {
-        for (int x = 0; x < _width - 2; x++) {
-            for (int y = 0; y < _height - 2; y++) {
-                set(x, y, tile);
-            }
-        }
-    }
-
-    public PlaneNode clear(int x, int y) {
-        return set(x, y, new Tile());
-    }
-
-    public boolean equals(Plane other) {
-        Plane bigPlane = new Plane(_height, _width);
-
+    public boolean equals(Plane that) {
+        if (_width != that._width) return false;
+        if (_height != that._height) return false;
+        
         for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
-                bigPlane.set(x, y, _plane[x][y]._tile);
+                if (!_plane[y][x].equals(that._plane[y][x])) {
+                    return false;
+                }
             }
+        }
+
+        return true;
+    }
+
+    public boolean isomorphic(Plane that) {
+        if (_width != that._width) return false;
+        if (_height != that._height) return false;
+        
+        if (translate(that)) return true;
+
+        rotate();
+        System.out.println("After rotation:\n" + toString());
+        if (translate(that)) return true;
+
+        rotate();
+        if (translate(that)) return true;
+
+        rotate();
+        if (translate(that)) return true;
+
+        rotate();
+        mirror();
+        if (translate(that)) return true;
+        
+        rotate();
+        if (translate(that)) return true;
+        
+        rotate();
+        if (translate(that)) return true;
+
+        rotate();
+        if (translate(that)) return true;
+
+        // return plane to original state
+        rotate();
+        mirror();
+
+        return false;
+    }
+
+    private boolean translate(Plane that) {
+        for (int x = 0; x < _width; x++) {
+            for (int y = 0; y < _height; y++) {
+                if (equals(that)) return true;
+
+                shiftDown();
+            }
+
+            shiftRight();
         }
 
         return false;
     }
 
-    public String toString() {
-        String out = "";
+    private void shiftRight() {
+        Tile[] temp = new Tile[_height];
 
         for (int y = 0; y < _height; y++) {
-            out += "--------------------------------------\n";
-
-            for (int x = 0; x < _width; x++) {
-                if (_plane[x][y]._tile._name == null) {
-                    out += " | .";
-                } else {
-                    out += " | " + _plane[x][y]._tile._name;
-                }
-            }
-
-            out += " |\n";
+            temp[y] = new Tile(_plane[y][_width-1]);
         }
 
-        out += "--------------------------------------\n";
+        for (int x = _width - 1; x > 0; x--) {
+            for (int y = 0; y < _height; y++) {
+                _plane[y][x] = new Tile(_plane[y][x-1]);
+            }
+        }
 
-        return out;
+        for (int y = 0; y < _height; y++) {
+            _plane[y][0] = new Tile(temp[y]);
+        }
+    }
+
+    private void shiftDown() {
+        Tile[] temp = new Tile[_width];
+
+        for (int x = 0; x < _width; x++) {
+            temp[x] = new Tile(_plane[_height-1][x]);
+        }
+
+        for (int x = 0; x < _width; x++) {
+            for (int y = 1; y < _height; y++) {
+                _plane[y][x] = new Tile(_plane[y-1][x]);
+            }
+        }
+
+        for (int x = 0; x < _width; x++) {
+            _plane[0][x] = new Tile(temp[x]);
+        }
+    }
+
+    /**
+     * Rotates the plane and each tile by 90 degrees clockwise.
+     * Only allows n*n planes.
+     */
+    private void rotate() {
+        if (_width != _height) return;
+
+        mirror();
+
+        Tile temp;
+
+        for (int x = 0; x < _width; x++) {
+            for (int y = x; y < _height; y++) {
+                temp = new Tile(_plane[y][x]);
+                _plane[y][x] = new Tile(_plane[y][x]);
+                _plane[y][x] = new Tile(temp);
+
+                _plane[y][x].rotate();
+                _plane[y][x].rotate();
+            }
+        }
+    }
+
+    /**
+     * Mirrors the plane and each tile over the y-axis
+     */
+    private void mirror() {
+        Tile temp;
+
+        // mirror plane
+        for (int x = 0; x < _width / 2; x++) {
+            for (int y = 0; y < _height; y++) {
+                temp = new Tile(_plane[y][x]);
+                _plane[y][x] = new Tile(_plane[y][_width-x-1]);
+                _plane[_width-x-1][y] = new Tile(temp);
+            }
+        }
+
+        // mirror tiles
+        for (int x = 0; x < _width; x++) {
+            for (int y = 0; y < _height; y++) {
+                _plane[y][x].mirror();
+            }
+        }
+    }
+
+    public String toString() {
+        // Determine the maximum ID length
+        int maxLength = 1; // Start with a minimum length to accommodate single-digit IDs
+        for (int y = 0; y < _height; y++) {
+            for (int x = 0; x < _width; x++) {
+                if (_plane[y][x] != null) {
+                    int idLength = String.valueOf(_plane[y][x]._id).length();
+                    maxLength = Math.max(maxLength, idLength);
+                }
+            }
+        }
+    
+        StringBuilder out = new StringBuilder();
+        // Calculate the total length for the dashes
+        int totalLength = (maxLength + 3) * _width - 1;
+        String dashes = "-".repeat(totalLength + 2);
+        String cellFormat = "| %-" + maxLength + "s "; // Dynamic padding based on maxLength
+    
+        out.append(dashes).append("\n");
+        
+        for (int y = 0; y < _height; y++) {
+            for (int x = 0; x < _width; x++) {
+                if (_plane[y][x] != null) {
+                    out.append(String.format(cellFormat, _plane[y][x]._id));
+                } else {
+                    // Handle null Tiles within the plane
+                    out.append(String.format(cellFormat, " "));
+                }
+            }
+            out.append("|\n");
+            out.append(dashes).append("\n");
+        }
+        
+        return out.toString();
+    }
+
+    public String toStringAround(int x, int y) {
+        checkBounds(x, y);
+        
+        // First, determine the maximum ID length, starting from 1 as the minimum for one-digit IDs
+        int maxLength = 1;
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                int nx = x + dx;
+                int ny = y + dy;
+                if (nx >= 0 && nx < _width && ny >= 0 && ny < _height) {
+                    int idLength = String.valueOf(_plane[nx][ny]._id).length();
+                    maxLength = Math.max(maxLength, idLength);
+                }
+            }
+        }
+    
+        StringBuilder out = new StringBuilder();
+        // Calculate the total length for the dashes based on the maxLength
+        int totalLength = (maxLength + 3) * 3 - 1; // Adjust for each cell's padding and separator
+        String dashes = "-".repeat(totalLength);
+        String cellFormat = "| %-" + maxLength + "s "; // Dynamic padding based on maxLength
+    
+        out.append(dashes).append("\n");
+        
+        for (int dy = -1; dy <= 1; dy++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                int nx = x + dx;
+                int ny = y + dy;
+                if (nx >= 0 && nx < _width && ny >= 0 && ny < _height) {
+                    out.append(String.format(cellFormat, _plane[nx][ny]._id));
+                } else {
+                    // Handle potential edge cases without assuming null values
+                    out.append(String.format(cellFormat, " "));
+                }
+            }
+            out.append("|\n"); // Close the row
+            out.append(dashes).append("\n");
+        }
+        
+        return out.toString();
     }
 }
