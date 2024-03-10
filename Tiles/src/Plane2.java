@@ -52,9 +52,10 @@ public class Plane2 {
         } 
     }
 
-    public Tile2 get(int x, int y) {
-        checkBounds(x, y);
-        return _plane[y][x];
+    private void checkPlanarBounds(int x, int y) {
+        if (x < 1 || x >= _width-1 || y < 1 || y >= _height-1) {
+            throw new IndexOutOfBoundsException("Invalid coordinates (Planar): (" + x + ", " + y + "). 1 <= x <= " + (_width-2) + " and 1 <= y <= " + (_height-2) + ".");
+        } 
     }
 
     public Tile2 set(int x, int y, Tile2 tile) {
@@ -73,6 +74,48 @@ public class Plane2 {
                 set(x, y, tile);
             }
         }
+    }
+
+    public Tile2 planarSet(int x, int y, Tile2 tile) {
+        checkPlanarBounds(x, y);
+        
+        Tile2 prev = set(x, y, tile);
+        
+        // add tiles to right and left edges of plane
+        if (x == 1) {
+            set(_width-1, y, tile);       // right
+        }
+        
+        if (x == _width - 2) {
+            set(0, y, tile);            // left
+        }
+
+        // add tiles to top and bottom edges and corners of plane
+        if (y == 1) {
+            set(x, _height-1, tile);                // bottom edge
+
+            if (x == 1) {
+                set(_width-1, _height-1, tile);     // bottom right corner
+            }
+            
+            if (x == _width - 2) {
+                set(0, _height-1, tile);            // bottom left corner
+            }
+        }
+
+        if (y == _height - 2) {
+            set(x, 0, tile);                        // top edge
+
+            if (x == 1) {
+                set(_width-1, 0, tile);             // top right corner
+            }
+            
+            if (x == _width - 2) {
+                set(0, 0, tile);                // top left corner
+            }
+        }
+
+        return prev;
     }
 
     public boolean equals(Plane2 that) {

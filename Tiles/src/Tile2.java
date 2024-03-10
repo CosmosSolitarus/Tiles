@@ -1,5 +1,6 @@
 public class Tile2 {
     public int _id;
+    public boolean _isPlaced;
     public boolean _isHorizontal;
     public boolean _isVertical;
     public boolean _isFrontSlash;
@@ -17,6 +18,7 @@ public class Tile2 {
 
     public Tile2(Tile2 that) {
         this._id = that._id;
+        this._isPlaced      =   that._isPlaced;
         this._isHorizontal  =   that._isHorizontal;
         this._isVertical    =   that._isVertical;
         this._isFrontSlash  =   that._isFrontSlash;
@@ -24,6 +26,7 @@ public class Tile2 {
     }
 
     private void init() {
+        _isPlaced       =   false;
         _isHorizontal   =   false;
         _isVertical     =   false;
         _isFrontSlash   =   false;
