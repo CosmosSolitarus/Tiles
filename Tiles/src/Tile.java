@@ -3,8 +3,8 @@ public class Tile {
     public boolean _isPlaced;
     public boolean _isHorizontal;
     public boolean _isVertical;
-    public boolean _isFrontSlash;
-    public boolean _isBackSlash;
+    public boolean _isForwardSlash;
+    public boolean _isBackslash;
 
     public Tile() {
         _id = -1;
@@ -21,16 +21,16 @@ public class Tile {
         this._isPlaced      =   that._isPlaced;
         this._isHorizontal  =   that._isHorizontal;
         this._isVertical    =   that._isVertical;
-        this._isFrontSlash  =   that._isFrontSlash;
-        this._isBackSlash   =   that._isBackSlash;
+        this._isForwardSlash  =   that._isForwardSlash;
+        this._isBackslash   =   that._isBackslash;
     }
 
     private void init() {
         _isPlaced       =   false;
         _isHorizontal   =   false;
         _isVertical     =   false;
-        _isFrontSlash   =   false;
-        _isBackSlash    =   false; 
+        _isForwardSlash   =   false;
+        _isBackslash    =   false; 
     }
 
     public boolean connectsH(Tile that) {
@@ -42,18 +42,18 @@ public class Tile {
     }
     
     public boolean connectsF(Tile that) {
-        return this._isFrontSlash   ==  that._isFrontSlash  ||  that._id == -1;
+        return this._isForwardSlash   ==  that._isForwardSlash  ||  that._id == -1;
     }
 
     public boolean connectsB(Tile that) {
-        return this._isBackSlash    ==  that._isBackSlash   ||  that._id == -1;
+        return this._isBackslash    ==  that._isBackslash   ||  that._id == -1;
     }
 
     public boolean equals(Tile that) {
         return  this._isHorizontal  ==  that._isHorizontal   &&
                 this._isVertical    ==  that._isVertical     &&
-                this._isFrontSlash  ==  that._isFrontSlash   &&
-                this._isBackSlash   ==  that._isBackSlash;
+                this._isForwardSlash  ==  that._isForwardSlash   &&
+                this._isBackslash   ==  that._isBackslash;
     }
 
     /**
@@ -65,27 +65,27 @@ public class Tile {
         _isHorizontal = _isVertical;
         _isVertical = temp;
 
-        temp = _isBackSlash;
+        temp = _isBackslash;
 
-        _isBackSlash = _isFrontSlash;
-        _isFrontSlash = temp;
+        _isBackslash = _isForwardSlash;
+        _isForwardSlash = temp;
     }
 
     /**
      * Mirrors the tile over the y-axis
      */
     public void mirror() {
-        boolean temp = _isBackSlash;
+        boolean temp = _isBackslash;
 
-        _isBackSlash = _isFrontSlash;
-        _isFrontSlash = temp;
+        _isBackslash = _isForwardSlash;
+        _isForwardSlash = temp;
     }
 
     public String toString() {
         // Convert booleans and id to String
-        String isBackSlashStr = String.valueOf(_isBackSlash);
+        String isBackSlashStr = String.valueOf(_isBackslash);
         String isVerticalStr = String.valueOf(_isVertical);
-        String isFrontSlashStr = String.valueOf(_isFrontSlash);
+        String isFrontSlashStr = String.valueOf(_isForwardSlash);
         String isHorizontalStr = String.valueOf(_isHorizontal);
         String idStr = String.valueOf(_id);
         

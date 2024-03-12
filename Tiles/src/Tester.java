@@ -50,83 +50,83 @@ public class Tester {
             Tile t14 = new Tile(14);
             Tile t15 = new Tile(15);
 
-            t0._isBackSlash = false;
-            t0._isFrontSlash = false;
+            t0._isBackslash = false;
+            t0._isForwardSlash = false;
             t0._isHorizontal = false;
             t0._isVertical = false;
 
-            t1._isBackSlash = true;
-            t1._isFrontSlash = false;
+            t1._isBackslash = true;
+            t1._isForwardSlash = false;
             t1._isHorizontal = false;
             t1._isVertical = false;
 
-            t2._isBackSlash = false;
-            t2._isFrontSlash = true;
+            t2._isBackslash = false;
+            t2._isForwardSlash = true;
             t2._isHorizontal = false;
             t2._isVertical = false;
 
-            t3._isBackSlash = false;
-            t3._isFrontSlash = false;
+            t3._isBackslash = false;
+            t3._isForwardSlash = false;
             t3._isHorizontal = true;
             t3._isVertical = false;
 
-            t4._isBackSlash = false;
-            t4._isFrontSlash = false;
+            t4._isBackslash = false;
+            t4._isForwardSlash = false;
             t4._isHorizontal = false;
             t4._isVertical = true;
 
-            t5._isBackSlash = true;
-            t5._isFrontSlash = true;
+            t5._isBackslash = true;
+            t5._isForwardSlash = true;
             t5._isHorizontal = false;
             t5._isVertical = false;
 
-            t6._isBackSlash = true;
-            t6._isFrontSlash = false;
+            t6._isBackslash = true;
+            t6._isForwardSlash = false;
             t6._isHorizontal = true;
             t6._isVertical = false;
 
-            t7._isBackSlash = true;
-            t7._isFrontSlash = false;
+            t7._isBackslash = true;
+            t7._isForwardSlash = false;
             t7._isHorizontal = false;
             t7._isVertical = true;
 
-            t8._isBackSlash = false;
-            t8._isFrontSlash = true;
+            t8._isBackslash = false;
+            t8._isForwardSlash = true;
             t8._isHorizontal = true;
             t8._isVertical = false;
 
-            t9._isBackSlash = false;
-            t9._isFrontSlash = true;
+            t9._isBackslash = false;
+            t9._isForwardSlash = true;
             t9._isHorizontal = false;
             t9._isVertical = true;
 
-            t10._isBackSlash = false;
-            t10._isFrontSlash = false;
+            t10._isBackslash = false;
+            t10._isForwardSlash = false;
             t10._isHorizontal = true;
             t10._isVertical = true;
 
-            t11._isBackSlash = true;
-            t11._isFrontSlash = true;
+            t11._isBackslash = true;
+            t11._isForwardSlash = true;
             t11._isHorizontal = true;
             t11._isVertical = false;
 
-            t12._isBackSlash = true;
-            t12._isFrontSlash = true;
+            t12._isBackslash = true;
+            t12._isForwardSlash = true;
             t12._isHorizontal = false;
             t12._isVertical = true;
 
-            t13._isBackSlash = true;
-            t13._isFrontSlash = false;
+            t13._isBackslash = true;
+            t13._isForwardSlash = false;
             t13._isHorizontal = true;
             t13._isVertical = true;
 
-            t14._isBackSlash = false;
-            t14._isFrontSlash = true;
+            t14._isBackslash = false;
+            t14._isForwardSlash = true;
             t14._isHorizontal = true;
             t14._isVertical = true;
 
-            t15._isBackSlash = true;
-            t15._isFrontSlash = true;
+            t15._isBackslash = true;
+            t15._isForwardSlash = true;
             t15._isHorizontal = true;
             t15._isVertical = true;
 
