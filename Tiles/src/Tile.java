@@ -81,13 +81,41 @@ public class Tile {
         _isForwardSlash = temp;
     }
 
+    public String ascii() {
+        if (_id == -1) return "  ";
+
+        String out = "";
+
+        if (_isBackslash && _isForwardSlash) {
+            out += "X";
+        } else if (_isBackslash) {
+            out += "\\";
+        } else if (_isForwardSlash) {
+            out += "/";
+        } else {
+            out += " ";
+        }
+
+        if (_isHorizontal && _isVertical) {
+            out += "+";
+        } else if (_isHorizontal) {
+            out += "-";
+        } else if (_isVertical) {
+            out += "|";
+        } else {
+            out += " ";
+        }
+
+        return out;
+    }
+
     public String toString() {
         // Convert booleans and id to String
         String isBackSlashStr = String.valueOf(_isBackslash);
         String isVerticalStr = String.valueOf(_isVertical);
         String isFrontSlashStr = String.valueOf(_isForwardSlash);
         String isHorizontalStr = String.valueOf(_isHorizontal);
-        String idStr = String.valueOf(_id);
+        String idStr = ascii();
         
         // Find the maximum length
         int maxLength = Math.max(isBackSlashStr.length(), Math.max(isVerticalStr.length(),

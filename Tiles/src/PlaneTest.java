@@ -335,9 +335,6 @@ public class PlaneTest {
         p8.set(0, 1, forw);
         p8.set(1, 1, forw);
 
-        System.out.println(p7.toString());
-        System.out.println(p8.toString());
-
         assertTrue(p7.isomorphic(p8));
     }
 }

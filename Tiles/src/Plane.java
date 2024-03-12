@@ -252,9 +252,7 @@ public class Plane {
         Tile[][] plane = new Tile[_height][_width];
         Tile tile;
 
-        int n = _width / 2;
-
-        for (int x = 0; x < n; x++) {
+        for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
                 tile = new Tile(_plane[y][x]);
                 tile.mirror();
@@ -264,9 +262,7 @@ public class Plane {
 
         for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
-                if (plane[y][x] != null) {
-                    _plane[y][x] = new Tile(plane[y][x]);
-                }
+                _plane[y][x] = new Tile(plane[y][x]);
             }
         }
     }
@@ -277,7 +273,7 @@ public class Plane {
         for (int y = 0; y < _height; y++) {
             for (int x = 0; x < _width; x++) {
                 if (_plane[y][x] != null) {
-                    int idLength = String.valueOf(_plane[y][x]._id).length();
+                    int idLength = _plane[y][x].ascii().length();
                     maxLength = Math.max(maxLength, idLength);
                 }
             }
@@ -294,7 +290,7 @@ public class Plane {
         for (int y = 0; y < _height; y++) {
             for (int x = 0; x < _width; x++) {
                 if (_plane[y][x] != null) {
-                    out.append(String.format(cellFormat, _plane[y][x]._id));
+                    out.append(String.format(cellFormat, _plane[y][x].ascii()));
                 } else {
                     // Handle null Tiles within the plane
                     out.append(String.format(cellFormat, " "));
