@@ -34,10 +34,10 @@ public class PlaneTiler {
 
         for (Tile tile : _tiles) {
             if (!tile._isPlaced &&
-                tile.connectsB(plane._plane[y-1][x-1]) && tile.connectsB(plane._plane[y+1][x+1]) &&
-                tile.connectsF(plane._plane[y-1][x+1]) && tile.connectsF(plane._plane[y+1][x-1]) &&
-                tile.connectsH(plane._plane[y][x-1]) && tile.connectsH(plane._plane[y][x+1]) &&
-                tile.connectsV(plane._plane[y-1][x]) && tile.connectsV(plane._plane[y+1][x])) {        
+                tile.connectsB(plane.get(x-1, y-1)) && tile.connectsB(plane.get(x+1, y+1)) &&
+                tile.connectsF(plane.get(x+1, y-1)) && tile.connectsF(plane.get(x-1, y+1)) &&
+                tile.connectsH(plane.get(x-1, y)) && tile.connectsH(plane.get(x+1, y)) &&
+                tile.connectsV(plane.get(x, y-1)) && tile.connectsV(plane.get(x, y+1))) {        
                 candidates.add(tile);
             }
         }
@@ -51,7 +51,7 @@ public class PlaneTiler {
 
     private void tiler(Plane plane, int x, int y, long start) {
         // base case 1 - plane is full
-        if (plane._plane[_height-2][_width-2]._id != -1) {
+        if (plane.get(_width-2, _height-2)._id != -1) {
             for (Plane solution : _solutions) {
                 if (plane.isomorphic(solution)) {
                     return;

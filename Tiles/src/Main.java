@@ -1,4 +1,4 @@
-public class Tester {
+public class Main {
     public static void main(String[] args) {
         /*
         Plane2 plane = new Plane2(2, 2);

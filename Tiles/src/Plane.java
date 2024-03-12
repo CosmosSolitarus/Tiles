@@ -1,7 +1,7 @@
 public class Plane {
-    public int _width;
-    public int _height;
-    public Tile[][] _plane;
+    private int _width;
+    private int _height;
+    private Tile[][] _plane;
 
     public Plane() {
         _width = 0;
@@ -116,6 +116,10 @@ public class Plane {
         }
 
         return prev;
+    }
+
+    public Tile get(int x, int y) {
+        return _plane[y][x];
     }
 
     public boolean equals(Plane that) {
