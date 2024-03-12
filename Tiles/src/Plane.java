@@ -119,6 +119,7 @@ public class Plane {
     }
 
     public Tile get(int x, int y) {
+        checkBounds(x, y);
         return _plane[y][x];
     }
 
@@ -137,51 +138,52 @@ public class Plane {
         return true;
     }
 
-    public boolean isomorphic(Plane that) {
-        if (_width != that._width) return false;
-        if (_height != that._height) return false;
+    public boolean isomorphic(Plane plane) {
+        if (_width != plane._width) return false;
+        if (_height != plane._height) return false;
         
-        if (translate(that)) return true;
+        Plane that = new Plane(plane);
 
-        rotate();
-        System.out.println("After rotation:\n" + toString());
-        if (translate(that)) return true;
+        if (translated(that)) return true;
 
-        rotate();
-        if (translate(that)) return true;
+        that.rotate();
+        if (translated(that)) return true;
 
-        rotate();
-        if (translate(that)) return true;
+        that.rotate();
+        if (translated(that)) return true;
 
-        rotate();
-        mirror();
-        if (translate(that)) return true;
+        that.rotate();
+        if (translated(that)) return true;
+
+        that.rotate();
+        that.mirror();
+        if (translated(that)) return true;
         
-        rotate();
-        if (translate(that)) return true;
+        that.rotate();
+        if (translated(that)) return true;
         
-        rotate();
-        if (translate(that)) return true;
+        that.rotate();
+        if (translated(that)) return true;
 
-        rotate();
-        if (translate(that)) return true;
+        that.rotate();
+        if (translated(that)) return true;
 
         // return plane to original state
-        rotate();
-        mirror();
+        that.rotate();
+        that.mirror();
 
         return false;
     }
 
-    private boolean translate(Plane that) {
-        for (int x = 0; x < _width; x++) {
+    private boolean translated(Plane that) {
+        for (int x = 0; x < _width; x++) { 
             for (int y = 0; y < _height; y++) {
                 if (equals(that)) return true;
 
-                shiftDown();
+                that.shiftDown();
             }
 
-            shiftRight();
+            that.shiftRight();
         }
 
         return false;
@@ -237,11 +239,11 @@ public class Plane {
         for (int x = 0; x < _width; x++) {
             for (int y = x; y < _height; y++) {
                 temp = new Tile(_plane[y][x]);
-                _plane[y][x] = new Tile(_plane[y][x]);
-                _plane[y][x] = new Tile(temp);
+                _plane[y][x] = new Tile(_plane[x][y]);
+                _plane[x][y] = new Tile(temp);
 
                 _plane[y][x].rotate();
-                _plane[y][x].rotate();
+                _plane[x][y].rotate();
             }
         }
     }
