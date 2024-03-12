@@ -141,7 +141,8 @@ public class Plane {
     public boolean isomorphic(Plane plane) {
         if (_width != plane._width) return false;
         if (_height != plane._height) return false;
-        
+        if (_width != _height) return false;  // avoiding non-n*n planes for now
+
         Plane that = new Plane(plane);
 
         if (translated(that)) return true;
@@ -168,24 +169,18 @@ public class Plane {
         that.rotate();
         if (translated(that)) return true;
 
-        // return plane to original state
-        that.rotate();
-        that.mirror();
-
         return false;
     }
 
     private boolean translated(Plane that) {
         for (int x = 0; x < _width; x++) { 
-            for (int y = 0; y < _height; y++) {
+            for (int y = 0; y < _height; y++) {                
                 if (equals(that)) return true;
 
                 that.shiftDown();
             }
-
             that.shiftRight();
         }
-
         return false;
     }
 
@@ -215,7 +210,7 @@ public class Plane {
         }
 
         for (int x = 0; x < _width; x++) {
-            for (int y = 1; y < _height; y++) {
+            for (int y = _height - 1; y >= 1; y--) {
                 _plane[y][x] = new Tile(_plane[y-1][x]);
             }
         }
@@ -230,20 +225,22 @@ public class Plane {
      * Only allows n*n planes.
      */
     private void rotate() {
-        if (_width != _height) return;
+        // if (_width != _height) return;
 
-        mirror();
-
-        Tile temp;
+        Tile[][] plane = new Tile[_height][_width];
+        Tile tile;
 
         for (int x = 0; x < _width; x++) {
-            for (int y = x; y < _height; y++) {
-                temp = new Tile(_plane[y][x]);
-                _plane[y][x] = new Tile(_plane[x][y]);
-                _plane[x][y] = new Tile(temp);
+            for (int y = 0; y < _height; y++) {
+                tile = new Tile(_plane[x][y]);
+                tile.rotate();
+                plane[y][_width-x-1] = new Tile(tile);
+            }
+        }
 
-                _plane[y][x].rotate();
-                _plane[x][y].rotate();
+        for (int x = 0; x < _width; x++) {
+            for (int y = 0; y < _height; y++) {
+                _plane[y][x] = new Tile(plane[y][x]);
             }
         }
     }
@@ -252,21 +249,24 @@ public class Plane {
      * Mirrors the plane and each tile over the y-axis
      */
     private void mirror() {
-        Tile temp;
+        Tile[][] plane = new Tile[_height][_width];
+        Tile tile;
 
-        // mirror plane
-        for (int x = 0; x < _width / 2; x++) {
+        int n = _width / 2;
+
+        for (int x = 0; x < n; x++) {
             for (int y = 0; y < _height; y++) {
-                temp = new Tile(_plane[y][x]);
-                _plane[y][x] = new Tile(_plane[y][_width-x-1]);
-                _plane[_width-x-1][y] = new Tile(temp);
+                tile = new Tile(_plane[y][x]);
+                tile.mirror();
+                plane[y][_width-x-1] = new Tile(tile);
             }
         }
 
-        // mirror tiles
         for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
-                _plane[y][x].mirror();
+                if (plane[y][x] != null) {
+                    _plane[y][x] = new Tile(plane[y][x]);
+                }
             }
         }
     }

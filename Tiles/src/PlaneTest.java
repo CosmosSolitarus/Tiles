@@ -243,26 +243,101 @@ public class PlaneTest {
         Plane p0 = new Plane(5, 5);
         Plane p1 = new Plane(3, 4);
 
+        // different size test
         assertFalse(p0.isomorphic(p1));
 
+        // translation only test
         Plane p2 = new Plane(p0);
 
         assertTrue(p0.isomorphic(p2));
 
-        Tile t0 = new Tile(0);
-        t0._isBackslash = true;
+        Tile vert = new Tile(0);
+        vert._isVertical = true;
 
-        p0.set(1, 2, t0);
-        p2.set(0, 2, t0);
+        p0.set(1, 2, vert);
+        p2.set(0, 2, vert);
+
+        assertTrue(p0.isomorphic(p2));
+
+        Tile hori = new Tile(1);
+        hori._isHorizontal = true;
+
+        p0.set(4, 1, hori);
+        p2.set(3, 1, hori);
 
         assertTrue(p0.isomorphic(p2));
 
-        Tile t1 = new Tile(1);
-        t1._isHorizontal = true;
+        // rotation only test
+        Plane p3 = new Plane(5, 5);
+        Plane p4 = new Plane(5, 5);
 
-        p0.set(4, 1, t1);
-        p2.set(3, 1, t1);
+        p3.set(0, 0, vert);
+        p3.set(0, 1, vert);
+        p3.set(0, 2, vert);
 
-        assertTrue(p0.isomorphic(p2));
+        p4.set(0, 0, hori);
+        p4.set(1, 0, hori);
+        p4.set(2, 0, hori);
+
+        assertFalse(p3.isomorphic(p2));
+        assertTrue(p3.isomorphic(p4));
+
+        // mirror only test
+        Plane p5 = new Plane(5, 5);
+        Plane p6 = new Plane(5, 5);
+
+        Tile back = new Tile(2);
+        back._isBackslash = true;
+
+        Tile forw = new Tile(3);
+        forw._isForwardSlash = true;
+
+        p5.set(0, 0, back);
+        p5.set(0, 1, vert);
+        p5.set(0, 2, forw);
+        p5.set(1, 1, hori);
+
+        p6.set(4, 0, forw);
+        p6.set(4, 1, vert);
+        p6.set(4, 2, back);
+        p6.set(3, 1, hori);
+
+        assertTrue(p5.isomorphic(p6));
+
+        // rotation, translation, and mirror test
+        Plane p7 = new Plane(5, 5);
+        Plane p8 = new Plane(5, 5);
+
+        p7.set(0, 0, back);
+        p7.set(1, 1, back);
+        p7.set(2, 2, back);
+
+        p7.set(3, 3, vert);
+        p7.set(3, 4, vert);
+
+        p7.set(1, 4, hori);
+        p7.set(2, 4, hori);
+
+        p7.set(4, 1, forw);
+        p7.set(4, 2, forw);
+
+        // mirror, rotate, left 2, down 1
+        p8.set(2, 0, back);
+        p8.set(1, 4, back);
+        p8.set(0, 3, back);
+
+        p8.set(3, 2, hori);
+        p8.set(4, 2, hori);
+
+        p8.set(3, 3, vert);
+        p8.set(3, 4, vert);
+
+        p8.set(0, 1, forw);
+        p8.set(1, 1, forw);
+
+        System.out.println(p7.toString());
+        System.out.println(p8.toString());
+
+        assertTrue(p7.isomorphic(p8));
     }
 }
