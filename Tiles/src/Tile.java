@@ -106,6 +106,10 @@ public class Tile {
             out += " ";
         }
 
+        if (out.equals("  ")) {
+            out = " *";
+        }
+
         return out;
     }
 

@@ -120,6 +120,7 @@ public class Main {
 
         pt.tiler();
 
+        System.out.println("Number of Solutions: " + pt._solutions.size());
         System.out.println(pt.printSolutions());
     }
 }
