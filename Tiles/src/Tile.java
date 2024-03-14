@@ -1,3 +1,8 @@
+/* A tile is a
+ * 
+ * @Author  Jack Roberts
+ * 14 March 2024
+ */
 public class Tile {
     public int _id;
     public boolean _isPlaced;
@@ -18,42 +23,42 @@ public class Tile {
 
     public Tile(Tile that) {
         this._id = that._id;
-        this._isPlaced      =   that._isPlaced;
-        this._isHorizontal  =   that._isHorizontal;
-        this._isVertical    =   that._isVertical;
-        this._isForwardSlash  =   that._isForwardSlash;
-        this._isBackslash   =   that._isBackslash;
+        this._isPlaced = that._isPlaced;
+        this._isHorizontal = that._isHorizontal;
+        this._isVertical = that._isVertical;
+        this._isForwardSlash = that._isForwardSlash;
+        this._isBackslash = that._isBackslash;
     }
 
     private void init() {
-        _isPlaced       =   false;
-        _isHorizontal   =   false;
-        _isVertical     =   false;
-        _isForwardSlash   =   false;
-        _isBackslash    =   false; 
+        _isPlaced = false;
+        _isHorizontal = false;
+        _isVertical = false;
+        _isForwardSlash = false;
+        _isBackslash = false; 
     }
 
     public boolean connectsH(Tile that) {
-        return this._isHorizontal   ==  that._isHorizontal  ||  that._id == -1;
+        return this._isHorizontal == that._isHorizontal || that._id == -1;
     }
 
     public boolean connectsV(Tile that) {
-        return this._isVertical     ==  that._isVertical    ||  that._id == -1;
+        return this._isVertical == that._isVertical || that._id == -1;
     }
     
     public boolean connectsF(Tile that) {
-        return this._isForwardSlash   ==  that._isForwardSlash  ||  that._id == -1;
+        return this._isForwardSlash == that._isForwardSlash || that._id == -1;
     }
 
     public boolean connectsB(Tile that) {
-        return this._isBackslash    ==  that._isBackslash   ||  that._id == -1;
+        return this._isBackslash == that._isBackslash || that._id == -1;
     }
 
     public boolean equals(Tile that) {
-        return  this._isHorizontal  ==  that._isHorizontal   &&
-                this._isVertical    ==  that._isVertical     &&
-                this._isForwardSlash  ==  that._isForwardSlash   &&
-                this._isBackslash   ==  that._isBackslash;
+        return  this._isHorizontal == that._isHorizontal &&
+                this._isVertical == that._isVertical &&
+                this._isForwardSlash == that._isForwardSlash &&
+                this._isBackslash == that._isBackslash;
     }
 
     /**

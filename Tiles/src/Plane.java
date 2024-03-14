@@ -1,14 +1,28 @@
+/* A plane is a n*m array of Tile objects.
+ * 
+ * @Author  Jack Roberts
+ * 14 March 2024
+ */
 public class Plane {
     private int _width;
     private int _height;
     private Tile[][] _plane;
 
+    /**
+     * Default constructor.
+     */
     public Plane() {
         _width = 0;
         _height = 0;
         init();
     }
 
+    /**
+     * Overloaded constructor. Width and height must
+     * be non-negative.
+     * @param width     the width of the plane
+     * @param height    the height of the plane
+     */
     public Plane(int width, int height) {
         if (width < 0) {
             _width = 0;
@@ -25,6 +39,10 @@ public class Plane {
         init();
     }
 
+    /**
+     * Copy constructor. Deep copies another plane exactly.
+     * @param that  the plane being copied
+     */
     public Plane(Plane that) {
         this(that._width, that._height);
 
@@ -35,6 +53,9 @@ public class Plane {
         }
     }
 
+    /**
+     * Initializes a plane so that all Tiles are default tiles.
+     */
     private void init() {
         _plane = new Tile[_height][_width];
 
@@ -46,18 +67,39 @@ public class Plane {
         }
     }
 
+    /**
+     * Ensures (x,y) is a valid coordinate in the Plane.
+     * Throws an IndexOutOfBoundsException if bounds violated.
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     */
     private void checkBounds(int x, int y) {
         if (x < 0 || x >= _width || y < 0 || y >= _height) {
             throw new IndexOutOfBoundsException("Invalid coordinates: (" + x + ", " + y + "). 0 <= x <= " + (_width-1) + " and 0 <= y <= " + (_height-1) + ".");
         } 
     }
 
+    /**
+     * Ensures (x,y) is a valid coordinate in the Plane
+     * for the purpose of using planarSet(). Throws an 
+     * IndexOutOfBoundsException if bounds violated.
+     * @param x the x-coordinate
+     * @param y the y-coordinate
+     */
     private void checkPlanarBounds(int x, int y) {
         if (x < 1 || x >= _width-1 || y < 1 || y >= _height-1) {
             throw new IndexOutOfBoundsException("Invalid coordinates (Planar): (" + x + ", " + y + "). 1 <= x <= " + (_width-2) + " and 1 <= y <= " + (_height-2) + ".");
         } 
     }
 
+    /**
+     * Sets (x,y) in the Plane to a specified Tile. Returns
+     * the Tile that was in that location previously.
+     * @param x the x-coordinate the Tile will be placed at
+     * @param y the y-coordinate the Tile will be placed at
+     * @param tile  the Tile being placed
+     * @return  the previous Tile at (x,y)
+     */
     public Tile set(int x, int y, Tile tile) {
         checkBounds(x, y);
 
@@ -68,6 +110,10 @@ public class Plane {
         return prev;
     }
 
+    /**
+     * Sets all Tiles in the Plane to a specified Tile.
+     * @param tile  the Tile being placed
+     */
     public void setAll(Tile tile) {
         for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
@@ -76,6 +122,17 @@ public class Plane {
         }
     }
 
+    /**
+     * Sets (x,y) in the Plane to a specified Tile. Assumes
+     * the Plane is a torus, i.e. the top wraps around to the
+     * bottom, the left to the right, etc. Used for the
+     * purpose of checking if Tiles on one side connect with
+     * Tiles on the opposite side.
+     * @param x the x-coordinate the Tile will be placed at
+     * @param y the y-coordinate the Tile will be placed at
+     * @param tile  the Tile being placed
+     * @return`the  the previous Tile at (x,y)
+     */
     public Tile planarSet(int x, int y, Tile tile) {
         checkPlanarBounds(x, y);
         
@@ -118,11 +175,24 @@ public class Plane {
         return prev;
     }
 
+    /**
+     * Returns a Tile at a specified (x,y)
+     * @param x the x-coordinate of the Tile
+     * @param y the y-coordinate of the Tile
+     * @return  the Tile at (x,y)
+     */
     public Tile get(int x, int y) {
         checkBounds(x, y);
         return _plane[y][x];
     }
 
+    /**
+     * Determines if two Planes are equal. A plane
+     * equals another Plane if the Tiles at each location
+     * in both Planes are equal.
+     * @param that  the other Plane
+     * @return  true if the Planes are equal; false otherwise
+     */
     public boolean equals(Plane that) {
         if (_width != that._width) return false;
         if (_height != that._height) return false;
@@ -138,11 +208,22 @@ public class Plane {
         return true;
     }
 
+    /**
+     * Determines if two Planes are isomorhic. A Plane is 
+     * isomorphic to another Plane if the Planes are equal
+     * following some series of rotation, translation, and
+     * mirroring.
+     * @param plane the other Plane
+     * @return  true if the Planes are isomorphic; false otherwise
+     */
     public boolean isomorphic(Plane plane) {
         if (_width != plane._width) return false;
         if (_height != plane._height) return false;
         if (_width != _height) return false;  // avoiding non-n*n planes for now
 
+        // Plane gets altered by translation, rotation, and
+        // mirror functions, so a copy is made and checked
+        // for equality, leaving the original Plane unchanged.
         Plane that = new Plane(plane);
 
         if (translated(that)) return true;
@@ -172,6 +253,11 @@ public class Plane {
         return false;
     }
 
+    /**
+     * 
+     * @param that
+     * @return
+     */
     private boolean translated(Plane that) {
         for (int x = 0; x < _width; x++) { 
             for (int y = 0; y < _height; y++) {                
