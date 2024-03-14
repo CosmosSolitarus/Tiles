@@ -5,8 +5,6 @@ public class PlaneTiler {
     public ArrayList<Tile> _tiles;
     public int _width;
     public int _height;
-    public long start;
-    public long iterations;
 
     public PlaneTiler() {
         this(1, 1);
@@ -25,8 +23,6 @@ public class PlaneTiler {
         _tiles = new ArrayList<>();
         _width = width + 2;
         _height = height + 2;
-        start = -1;
-        iterations = 0;
     }
 
     public boolean add(Tile tile) {
@@ -50,15 +46,10 @@ public class PlaneTiler {
     }
 
     public void tiler() {
-        start = System.currentTimeMillis();
         tiler(new Plane(_width, _height), 1, 1);
     }
 
     private void tiler(Plane plane, int x, int y) {
-        //iterations++;
-
-        //if (iterations > 6) return;
-        
         // base case 1 - plane is full
         if (plane.get(_width-2, _height-2)._id != -1) {
             for (Plane solution : _solutions) {
@@ -78,15 +69,6 @@ public class PlaneTiler {
             return;
         }
 
-        // diagnostics
-        /*
-        if (iterations % 100000 == 0) {
-            System.out.println("Seconds since start: " + ((System.currentTimeMillis() - start) / 1000));
-            System.out.println("Iterations since start: " + iterations);
-            System.out.println("Average iterations per second: " + (iterations / ((System.currentTimeMillis() - start) / 1000)));
-        }
-        */
-
         // recursive call
         int nextX = x;
         int nextY = y;
@@ -102,9 +84,6 @@ public class PlaneTiler {
             plane.planarSet(x, y, candidate);
 
             candidate._isPlaced = true;
-
-            //System.out.println("Placed " + candidate.ascii() + " at (" + x + ", " + y + ")\nNew Board: ");
-            //System.out.println(plane.toString());
 
             tiler(plane, nextX, nextY);
 
