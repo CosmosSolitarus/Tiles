@@ -2,6 +2,8 @@ public class Main {
     public static void main(String[] args) {
         PlaneTiler pt = new PlaneTiler(4, 4);
 
+        // using if(true) so that setting up Tiles can be
+        // collapsed in VS Code.
         if(true) {
             Tile t0 = new Tile(0);
             Tile t1 = new Tile(1);
@@ -118,6 +120,7 @@ public class Main {
             pt.add(t15);
         }
 
+        // completes in about ~1 second
         pt.tiler();
 
         System.out.println("Number of Solutions: " + pt._solutions.size());

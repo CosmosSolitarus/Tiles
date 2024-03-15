@@ -1,4 +1,6 @@
-/* A plane is a n*m array of Tile objects.
+/* A Plane is a n*m array of Tile objects. The Plane can be treated as a Cartesian Plane in
+ * the fourth quadrant (bottom right) or as Torus, wherein the top wraps around to the bottom,
+ * left to the right, and corners to their opposite corners.
  * 
  * @Author  Jack Roberts
  * 14 March 2024
@@ -12,16 +14,14 @@ public class Plane {
      * Default constructor.
      */
     public Plane() {
-        _width = 0;
-        _height = 0;
-        init();
+        this(0, 0);
     }
 
     /**
      * Overloaded constructor. Width and height must
      * be non-negative.
-     * @param width     the width of the plane
-     * @param height    the height of the plane
+     * @param width     the width of the Plane
+     * @param height    the height of the Plane
      */
     public Plane(int width, int height) {
         if (width < 0) {
@@ -40,8 +40,8 @@ public class Plane {
     }
 
     /**
-     * Copy constructor. Deep copies another plane exactly.
-     * @param that  the plane being copied
+     * Copy constructor. Deep copies another Plane exactly.
+     * @param that  the Plane being copied
      */
     public Plane(Plane that) {
         this(that._width, that._height);
@@ -54,12 +54,12 @@ public class Plane {
     }
 
     /**
-     * Initializes a plane so that all Tiles are default tiles.
+     * Initializes a Plane so that all Tiles are default Tiles.
      */
     private void init() {
         _plane = new Tile[_height][_width];
 
-        // create blank tiles in the plane
+        // create blank Tiles in the Plane
         for (int x = 0; x < _width; x++) {
             for (int y = 0; y < _height; y++) {
                 _plane[y][x] = new Tile();
@@ -138,7 +138,7 @@ public class Plane {
         
         Tile prev = set(x, y, tile);
         
-        // add tiles to right and left edges of plane
+        // add Tiles to right and left edges of Plane
         if (x == 1) {
             set(_width-1, y, tile);       // right
         }
@@ -147,7 +147,7 @@ public class Plane {
             set(0, y, tile);            // left
         }
 
-        // add tiles to top and bottom edges and corners of plane
+        // add Tiles to top and bottom edges and corners of Plane
         if (y == 1) {
             set(x, _height-1, tile);                // bottom edge
 
@@ -187,11 +187,11 @@ public class Plane {
     }
 
     /**
-     * Determines if two Planes are equal. A plane
+     * Determines if two Planes are equal. A Plane
      * equals another Plane if the Tiles at each location
      * in both Planes are equal.
      * @param that  the other Plane
-     * @return  true if the Planes are equal; false otherwise
+     * @return      whether the Planes are equal
      */
     public boolean equals(Plane that) {
         if (_width != that._width) return false;
@@ -214,12 +214,12 @@ public class Plane {
      * following some series of rotation, translation, and
      * mirroring.
      * @param plane the other Plane
-     * @return  true if the Planes are isomorphic; false otherwise
+     * @return      whether the Planes are isomorphic
      */
     public boolean isomorphic(Plane plane) {
         if (_width != plane._width) return false;
         if (_height != plane._height) return false;
-        if (_width != _height) return false;  // avoiding non-n*n planes for now
+        if (_width != _height) return false;  // avoiding non-n*n Planes for now
 
         // Plane gets altered by translation, rotation, and
         // mirror functions, so a copy is made and checked
@@ -259,7 +259,7 @@ public class Plane {
      * shifts down or 1 Tile shift right. Alters the
      * given Plane 'that'.
      * @param that  the other Plane
-     * @return  whether the two Planes are equal by some translation
+     * @return      whether the two Planes are equal by some translation
      */
     private boolean translated(Plane that) {
         for (int x = 0; x < _width; x++) { 
@@ -322,7 +322,7 @@ public class Plane {
     /**
      * Helper method for isomorphic(). Rotates the 
      * Plane and each Tile by 90 degrees clockwise.
-     * Only allows n*n planes (currently handled by
+     * Only allows n*n Planes (currently handled by
      * isomorphic()).
      */
     private void rotate() {
@@ -371,7 +371,7 @@ public class Plane {
 
     /**
      * toString method for testing purposes. Prints the
-     * entire Plane.
+     * entire Plane. Generated mostly by ChatGPT.
      */
     public String toString() {
         // Determine the maximum ID length
@@ -398,7 +398,7 @@ public class Plane {
                 if (_plane[y][x] != null) {
                     out.append(String.format(cellFormat, _plane[y][x].ascii()));
                 } else {
-                    // Handle null Tiles within the plane
+                    // Handle null Tiles within the Plane
                     out.append(String.format(cellFormat, " "));
                 }
             }
@@ -411,7 +411,8 @@ public class Plane {
 
     /**
      * toString method for testing purposes. Prints the 
-     * 
+     * Tiles immediately surrounding the specified Tile
+     * at (x,y). Generated mostly by ChatGPT.
      */
     public String toStringAround(int x, int y) {
         checkBounds(x, y);
@@ -423,7 +424,7 @@ public class Plane {
                 int nx = x + dx;
                 int ny = y + dy;
                 if (nx >= 0 && nx < _width && ny >= 0 && ny < _height) {
-                    int idLength = String.valueOf(_plane[nx][ny]._id).length();
+                    int idLength = _plane[y][x].ascii().length();
                     maxLength = Math.max(maxLength, idLength);
                 }
             }
@@ -442,7 +443,7 @@ public class Plane {
                 int nx = x + dx;
                 int ny = y + dy;
                 if (nx >= 0 && nx < _width && ny >= 0 && ny < _height) {
-                    out.append(String.format(cellFormat, _plane[nx][ny]._id));
+                    out.append(String.format(cellFormat, _plane[nx][ny].ascii()));
                 } else {
                     // Handle potential edge cases without assuming null values
                     out.append(String.format(cellFormat, " "));

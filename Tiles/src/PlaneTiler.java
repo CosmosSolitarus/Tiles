@@ -1,3 +1,12 @@
+/* A PlaneTiler finds arrangments of provided Tiles on a provided Plane that tile the plane.
+ * To tile the plane, Tiles must connect to all Tiles immediately surrounding them (to the 
+ * top left, directly above, top right, directly right, bottom right, directly below, bottom
+ * left, and directly left). A border of one additional Tile than specified is used to utilize
+ * the planarSet() method of the Plane class.
+ * 
+ * @Author  Jack Roberts
+ * 15 March 2024
+ */
 import java.util.ArrayList;
 
 public class PlaneTiler {
@@ -6,10 +15,19 @@ public class PlaneTiler {
     public int _width;
     public int _height;
 
+    /**
+     * Default constructor.
+     */
     public PlaneTiler() {
         this(1, 1);
     }
 
+    /**
+     * Overloaded constructor. Width and height must
+     * be non-negative.
+     * @param width     the width of the Plane
+     * @param height    the height of the Plane
+     */
     public PlaneTiler(int width, int height) {
         if (width < 1) {
             width = 1;
@@ -25,10 +43,25 @@ public class PlaneTiler {
         _height = height + 2;
     }
 
+    /**
+     * Adds the specified Tile to the list of Tiles
+     * @param tile  the Tile being added
+     * @return      true (as specified by Collections.add)
+     */
     public boolean add(Tile tile) {
         return _tiles.add(tile);
     }
 
+    /**
+     * Returns the list of Tiles that have not already been
+     * placed in the Plane and satisfy all connection
+     * requirements of the eight Tiles immediately surrounding
+     * the specified (x,y).
+     * @param plane the current Plane
+     * @param x     the x-coordinate in the Plane
+     * @param y     the y-coordinate in the Plane
+     * @return      the list of valid Tiles
+     */
     private ArrayList<Tile> candidates(Plane plane, int x, int y) {
         ArrayList<Tile> candidates = new ArrayList<>();
 
@@ -45,10 +78,20 @@ public class PlaneTiler {
         return candidates;
     }
 
+    /**
+     * Public facing method to call the private tiler().
+     */
     public void tiler() {
         tiler(new Plane(_width, _height), 1, 1);
     }
 
+    /**
+     * A recursive approach to finding arrangements of Tiles
+     * that tile the plane.
+     * @param plane the current Plane
+     * @param x     the x-coordinate of the next Tile
+     * @param y     the y-coordinate of the next Tile
+     */
     private void tiler(Plane plane, int x, int y) {
         // base case 1 - plane is full
         if (plane.get(_width-2, _height-2)._id != -1) {
@@ -95,6 +138,11 @@ public class PlaneTiler {
         return;
     }
 
+    /**
+     * Converts all solution Planes to a string and
+     * returns them with formatting.
+     * @return  all solution Planes with formatting
+     */
     public String printSolutions() {
         String out = "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
         
