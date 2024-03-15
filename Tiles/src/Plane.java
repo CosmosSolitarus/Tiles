@@ -254,15 +254,17 @@ public class Plane {
     }
 
     /**
-     * 
-     * @param that
-     * @return
+     * Helper method for isomorphic(). Determines if 
+     * two Planes are equal by any sequence of 1 Tile 
+     * shifts down or 1 Tile shift right. Alters the
+     * given Plane 'that'.
+     * @param that  the other Plane
+     * @return  whether the two Planes are equal by some translation
      */
     private boolean translated(Plane that) {
         for (int x = 0; x < _width; x++) { 
             for (int y = 0; y < _height; y++) {                
                 if (equals(that)) return true;
-
                 that.shiftDown();
             }
             that.shiftRight();
@@ -270,6 +272,12 @@ public class Plane {
         return false;
     }
 
+    /**
+     * Helper method for translated(). Shifts all
+     * Tiles in the Plane one to the right. Tiles
+     * on the rightmost edge are placed on the
+     * leftmost edge.
+     */
     private void shiftRight() {
         Tile[] temp = new Tile[_height];
 
@@ -288,6 +296,11 @@ public class Plane {
         }
     }
 
+    /**
+     * Helper method for translated(). Shifts all
+     * Tiles in the Plane one down. Tiles on the
+     * bottommost edge are placed on the top edge.
+     */
     private void shiftDown() {
         Tile[] temp = new Tile[_width];
 
@@ -307,8 +320,10 @@ public class Plane {
     }
 
     /**
-     * Rotates the plane and each tile by 90 degrees clockwise.
-     * Only allows n*n planes.
+     * Helper method for isomorphic(). Rotates the 
+     * Plane and each Tile by 90 degrees clockwise.
+     * Only allows n*n planes (currently handled by
+     * isomorphic()).
      */
     private void rotate() {
         // if (_width != _height) return;
@@ -332,7 +347,8 @@ public class Plane {
     }
 
     /**
-     * Mirrors the plane and each tile over the y-axis
+     * Helper method for isomorphic(). Mirrors the 
+     * Plane and each Tile over the y-axis.
      */
     private void mirror() {
         Tile[][] plane = new Tile[_height][_width];
@@ -353,6 +369,10 @@ public class Plane {
         }
     }
 
+    /**
+     * toString method for testing purposes. Prints the
+     * entire Plane.
+     */
     public String toString() {
         // Determine the maximum ID length
         int maxLength = 1; // Start with a minimum length to accommodate single-digit IDs
@@ -389,6 +409,10 @@ public class Plane {
         return out.toString();
     }
 
+    /**
+     * toString method for testing purposes. Prints the 
+     * 
+     */
     public String toStringAround(int x, int y) {
         checkBounds(x, y);
         
