@@ -96,7 +96,7 @@ public class PlaneTiler {
         // base case 1 - plane is full
         if (plane.get(_width-2, _height-2)._id != -1) {
             for (Plane solution : _solutions) {
-                if (plane.isomorphic(solution)) {
+                if (plane.planarIsomorphic(solution)) {
                     return;
                 }
             }
