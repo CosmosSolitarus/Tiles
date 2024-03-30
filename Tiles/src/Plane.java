@@ -216,6 +216,123 @@ public class Plane {
      * @param plane the other Plane
      * @return      whether the Planes are isomorphic
      */
+    public boolean planarIsomorphic(Plane plane) {
+        if (_width != plane._width) return false;
+        if (_height != plane._height) return false;
+        if (_width != _height) return false;  // avoiding non-n*n Planes for now
+
+        // Plane gets altered by translation, rotation, and
+        // mirror functions, so a copy is made and checked
+        // for equality, leaving the original Plane unchanged.
+        Plane that = new Plane(plane);
+
+        if (planarTranslated(that)) return true;
+
+        that.rotate();
+        if (planarTranslated(that)) return true;
+
+        that.rotate();
+        if (planarTranslated(that)) return true;
+
+        that.rotate();
+        if (planarTranslated(that)) return true;
+
+        that.rotate();
+        that.mirror();
+        if (planarTranslated(that)) return true;
+        
+        that.rotate();
+        if (planarTranslated(that)) return true;
+        
+        that.rotate();
+        if (planarTranslated(that)) return true;
+
+        that.rotate();
+        if (planarTranslated(that)) return true;
+
+        return false;
+    }
+
+    /**
+     * Helper method for isomorphic(). Determines if 
+     * two Planes are equal by any sequence of 1 Tile 
+     * shifts down or 1 Tile shift right. Alters the
+     * given Plane 'that'.
+     * @param that  the other Plane
+     * @return      whether the two Planes are equal by some translation
+     */
+    private boolean planarTranslated(Plane that) {
+        for (int x = 0; x < _width-2; x++) { 
+            for (int y = 0; y < _height-2; y++) {                
+                if (equals(that)) return true;
+                that.planarShiftDown();
+            }
+            that.planarShiftRight();
+        }
+        return false;
+    }
+
+    /**
+     * Helper method for translated(). Shifts all
+     * Tiles in the Plane one to the right. Tiles
+     * on the rightmost edge are placed on the
+     * leftmost edge.
+     */
+    public void planarShiftRight() {
+        Tile[] temp = new Tile[_height-2];
+
+        // copy right-most Tiles (excluding border Tiles)
+        for (int y = 0; y < _height-2; y++) {
+            temp[y] = new Tile(_plane[y+1][_width-2]);
+        }
+
+        // move other Tiles right one (excluding border Tiles)
+        for (int x = _width-2; x > 1; x--) {
+            for (int y = 1; y < _height-1; y++) {
+                planarSet(x, y, new Tile(_plane[y][x-1]));
+            }
+        }
+
+        // paste right-most Tiles to left (excluding border Tiles)
+        for (int y = 0; y < _height-2; y++) {
+            planarSet(1, y+1, new Tile(temp[y]));
+        }
+    }
+
+    /**
+     * Helper method for translated(). Shifts all
+     * Tiles in the Plane one down. Tiles on the
+     * bottommost edge are placed on the top edge.
+     */
+    public void planarShiftDown() {
+        Tile[] temp = new Tile[_width-2];
+
+        // copy bottom-most Tiles (excluding border Tiles)
+        for (int x = 0; x < _width-2; x++) {
+            temp[x] = new Tile(_plane[_height-2][x+1]);
+        }
+
+        // move other Tiles down one (excluding border Tiles)
+        for (int x = 1; x < _width-1; x++) {
+            for (int y = _height-2; y > 1; y--) {
+                planarSet(x, y, new Tile(_plane[y-1][x]));
+            }
+        }
+
+        // paste bottom-most Tiles to top (excluding border Tiles)
+        for (int x = 0; x < _width-2; x++) {
+            planarSet(x+1, 1, new Tile(temp[x]));
+        }
+    }
+
+    /**
+     * Determines if two Planes are isomorhic. A Plane is 
+     * isomorphic to another Plane if the Planes are equal
+     * following some series of rotation, translation, and
+     * mirroring.
+     * @param plane the other Plane
+     * @return      whether the Planes are isomorphic
+     */
     public boolean isomorphic(Plane plane) {
         if (_width != plane._width) return false;
         if (_height != plane._height) return false;
@@ -273,6 +390,18 @@ public class Plane {
     }
 
     /**
+     * Helper method for debugging isomorphic().
+     * Shifts all Tiles in the Plane one to the
+     * right, 'shifts' times.
+     * @param shifts the number of times shifted to the right
+     */
+    public void shiftRight(int shifts) {
+        for (int i = 0; i < shifts; i++) {
+            shiftRight();
+        }
+    }
+
+    /**
      * Helper method for translated(). Shifts all
      * Tiles in the Plane one to the right. Tiles
      * on the rightmost edge are placed on the
@@ -293,6 +422,18 @@ public class Plane {
 
         for (int y = 0; y < _height; y++) {
             _plane[y][0] = new Tile(temp[y]);
+        }
+    }
+
+    /**
+     * Helper method for debugging isomorphic().
+     * Shifts all Tiles in the Plane one down,
+     * 'shifts' times.
+     * @param shifts the number of times shifted down
+     */
+    public void shiftDown(int shifts) {
+        for (int i = 0; i < shifts; i++) {
+            shiftDown();
         }
     }
 
@@ -320,12 +461,12 @@ public class Plane {
     }
 
     /**
-     * Helper method for isomorphic(). Rotates the 
-     * Plane and each Tile by 90 degrees clockwise.
-     * Only allows n*n Planes (currently handled by
-     * isomorphic()).
+     * Helper method for isomorphic() and planarIsomorphic().
+     * Rotates the Plane and each Tile by 90 degrees 
+     * clockwise. Only allows n*n Planes (currently 
+     * handled by isomorphic() and planarIsomorphic).
      */
-    private void rotate() {
+    public void rotate() {
         // if (_width != _height) return;
 
         Tile[][] plane = new Tile[_height][_width];
@@ -347,10 +488,10 @@ public class Plane {
     }
 
     /**
-     * Helper method for isomorphic(). Mirrors the 
-     * Plane and each Tile over the y-axis.
+     * Helper method for isomorphic() and planarIsomorphic().
+     * Mirrors the Plane and each Tile over the y-axis.
      */
-    private void mirror() {
+    public void mirror() {
         Tile[][] plane = new Tile[_height][_width];
         Tile tile;
 
